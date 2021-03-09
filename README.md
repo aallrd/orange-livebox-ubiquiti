@@ -1,6 +1,7 @@
-# Orange Livebox to Ubiquiti USG
+# Orange Livebox to Ubiquiti
 
-The goal is to replace the Orange Livebox Play Fibre by a Unify Security Gateway from Ubiquiti.
+The goal is to replace the Orange Livebox with a fiber connection by a device
+from Ubiquiti.
 
 The services that must work after the replacement are:
 - Internet access (IPv4)
@@ -10,10 +11,56 @@ However:
 - The IPv6 connectivity will not be configured
 - The phone service will not be configured
 
+## Services
+
+The requirements to access the services provided by Orange:
+
+- WAN access (Internet):
+  * DHCP ?
+  * PPoE ?
+- TV:
+  * Proxy IGMP?
+- Phone: out of scope
+
 ## Hardware
 
-- [Livebox v3 (Play Fibre)](https://assistance.orange.fr/equipement/livebox-et-modems/livebox-play-sagemcom)
+### Glossary
+
+- **[ONT](https://en.wikipedia.org/wiki/Network_interface_device#Optical_network_terminals)**: Optical Network Termination
+  * Client device on the receiving end of the ISP fiber connection
+- **[OLT](https://en.wikipedia.org/wiki/Optical_line_termination)**: Optical Line Termination
+  * ISP device on the emitting end of the ISP fiber connection
+- **[SFP](https://en.wikipedia.org/wiki/Small_form-factor_pluggable_transceiver)**: Small form-factor pluggable
+  * A small form factor device, that integrates into other devices wih an SFP
+    port
+- **AP**: Access Point (Wifi)
+
+### Orange
+
+The Livebox is a router, a switch and a Wifi AP.
+
+- [Livebox v5](https://assistance.orange.fr/equipement/livebox-et-modems/sagemcom-livebox-5)
+  * The ONT is built-in
+- [DEPRECATED][Livebox v3](https://assistance.orange.fr/equipement/livebox-et-modems/livebox-play-sagemcom)
+  * The ONT is an external device
+
+### Ubiquiti
+
+- [UniFi Dream Machine](https://store.ui.com/collections/unifi-network-routing-switching/products/unifi-dream-machine)
+  * All-in-one device: router (USG), switch, Wifi AP
+  * No SFP port, requires an external ONT
+  * Cannot set some options?
+
 - [UniFi Security Gateway](https://eu.store.ui.com/collections/routing-switching/products/unifi-security-gateway)
+
+- [EdgeMAX EdgeRouter X](https://www.ui.com/edgemax/edgerouter-x/)
+  * With SFP port: [EdgeMAX EdgeRouter X SFP](https://www.ui.com/edgemax/edgerouter-x-sfp/)
+
+- ONT
+  * [UFiber instant](https://store.ui.com/collections/operator-ufiber/products/uf-instant)
+    - SFP: one less device to power-on and taking space
+    - Impossible to parameter? How to clone the serial number from the Orange ONT?
+    - Only compatible with an Ubiquiti OLT [(source)](https://help.ui.com/hc/en-us/articles/115009335068-UFiber-GPON-Supported-Third-Party-OLTs#1)
 
 ## Documentation
 
@@ -34,7 +81,9 @@ The patch is availble under *dhclient/iscdhcp_priority.patch*.
 
 ## Sources
 
-The *dhclient3* used in the USG is a Vyatta custom version of the Debian Lenny package *dhcp3-3.0.6.dfsg.deb*. [github](https://github.com/vyos-legacy/vyatta-dhcp3)
+The *dhclient3* used in the USG is a Vyatta custom version of the Debian Lenny package *dhcp3-3.0.6.dfsg.deb*.
+
+The source repo can be found here: [vyatta-dhcp3 [github]](https://github.com/vyos-legacy/vyatta-dhcp3)
 
 In order to download the sources used to build the *dhclient3* packaged in the USG firmware, we need to download its corresponding GPL archive from the *Ubiquti* website.
 
